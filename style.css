@@ -1,0 +1,15 @@
+#userInput {
+    margin-top: 10vh;
+    text-align: center;
+}
+
+#outputVal{
+    font-size: 30px;
+    text-align: center;
+}
+
+#outputText {
+    font-size: 30px;
+    text-align: center;
+    width: 100%;
+}

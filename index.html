@@ -3,87 +3,37 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-            <!-- Global site tag (gtag.js) - Google Analytics -->
-            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-160640936-1"></script>
-            <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'UA-160640936-1');
-            </script>
-            
+    <head>  
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Calculus Visualizer</title>
+        <title>WebWork Expressions</title>
         <meta name="description" content="Learn Calculus">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!--Core Custom CSS Files + Bootstrap-->
-        <link rel="stylesheet" href="./css/Main.css">
-        <link rel="stylesheet" href="./css/UI.css">
-        <link rel="stylesheet" href="./css/Buttons.css">
+        <link rel="stylesheet" href="./style.css">
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         
-        <!--DESMOS API-->
-        <script src="https://www.desmos.com/api/v1.4/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
-    
         <!-- JQuery, math.js and MathQuill library for typing mathematical expressions and latex -->
         <link rel="stylesheet" href="./mathquill/mathquill.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="./mathquill/mathquill.js"></script>
     </head>
-    <body style="background-color: black;">
+    <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <div id = "buttonsContainer">
-            <!--Visualize Derivative-->
-            <button id  = "button-derivative" class = "btn btn-primary">⇓ Visualize Derivative</button>
-                <div id="myDropdown" class="dropdown-content">
-                    <h4>Start:</h4><input type = "number" id = "startBoundInput" class = "inputField">
-                    <h4>End:</h4><input type = "number" id = "endBoundInput" class = "inputField">
-                    <button id = "startVisualizing" class = "btn btn-success">START</button><br>
-                </div>
 
-       
-            <!--Visualize Riemann sums-->
-            <button id  = "button-riemann" class = "btn btn-danger">⇓ Visualize Riemann sums</button>
-            <div id="myDropdown_0" class="dropdown-content">
-                <h4>Start:</h4><input type = "number" id = "startBoundInput_0" class = "inputField">
-                <h4>End:</h4><input type = "number" id = "endBoundInput_0" class = "inputField">
-
-                <button id = "startVisualizing_0" class = "btn btn-success">APPROXIMATE</button>
-                <select id="pointOfApproximation">
-                    <option value="left">Left</option>
-                    <option value="right">Right</option>
-                </select>
-            </div>
-
-            <!--Visualize Taylor Series-->    
-            <button id  = "button-taylor" class = "btn btn-warning">⇓ Visualize Taylor Series</button>
-            <div id="myDropdown_1" class="dropdown-content">
-                <h4>Point:</h4><input type = "number" id = "centralPoint" class = "inputField">
-                <button id = "startVisualizing_1" class = "btn btn-success">APPROXIMATE</button><br>
-            </div> 
-
-            <!--Visualize Waves -->    
-            <button id  = "button-waves" class = "btn btn-success" style="float: right;">⇓ Visualize Waves</button>
-            <div id="myDropdown_2" class="dropdown-content" style="float: right;">
-                <h4>Amplitude:</h4><input type = "number" id = "amplitude" class = "inputField">
-                <h4>Angular Frequency:</h4><input type = "number" id = "frequency" class = "inputField">
-                <button id = "startVisualizing_2" class = "btn btn-success">DO DA WAVE</button><br>
-            </div> 
-            
-            <!-- <h5 style="color:white; float: right;">All trigonometric functions and their products MUST have proper brackets for d/dx. I.E. sin(x), (x)sin(x)</h5> <br> -->
-            <!-- <h5 style="color:white; float: right;">All fraction coefficients MUST be converted to decimal form, or power form C^(-1).</h5>  -->
-        </div>
-        <h2 id = "author">Made with ♡ by Jack He.</h2> <p style="text-align: center; color: white;"> Built using Node.js, mathjs, opensource Desmos API, HTML/CSS/bootstrap</p> <h5 style="text-align: center;"><a  target="_blank" href = "https://github.com/ProjectsByJackHe">Github •</a> <a  target="_blank" href = "https://www.linkedin.com/in/jack-he-845587161/">LinkedIn •</a> <a href = "https://www.youtube.com/channel/UC9xFO-llZ2ontatfj9LtLxw" target="_blank">YouTube</a></h5>
         <div id = "userInput">  
-            <h1>f(x) =  <span id="math-field"></span></h1>
+            <h1>Expression:  <span id="math-field"></span></h1>
         </div>
-        <div id = "root"></div>
-        <script src="./dist/bundle.js" type = "module"></script>
+        <textarea id="outputText" type = "text"></textarea>
+        <h2>Please note: </h2>
+        <ol>
+            <li>You can type <h4>\sqrt(</h4> for square root (alternatively, you can just set your expression to the power of 1 / 2</li><br>
+            <li>For multiplication, there is no need to type <h4>*</h4></li><br>
+            <li>Never have the sequence of characters <h4>cdot</h4> anywhere in your expression. This is because my parsing algorithm filters them out entirely to avoid confusion with other common WebWork / latex internal symbols.</li>
+        </ol>
+        <script src="script.js"></script>
     </body>
 </html>

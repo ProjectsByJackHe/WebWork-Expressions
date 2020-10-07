@@ -1,0 +1,180 @@
+/**
+ * Main goal: 
+ * - allow the user to write clean math expressions via mathquill and output a ready-to-paste webwork answer
+ * Tasks: 
+ * - Get the latex expression 
+ * - Parse the latex expression
+ * - output to the screen a webwork friendly answer
+ */
+
+var mathFieldSpan = document.getElementById('math-field');
+var outputText = document.getElementById('outputText');
+var webwork = ""
+outputText.onfocus = (event) => {
+    event.target.select()
+}
+outputText.onblur = (e) => {
+    outputText.value = webwork
+}
+var MQ = MathQuill.getInterface(2);
+var mathField = MQ.MathField(mathFieldSpan, {
+    spaceBehavesLikeTab: true, 
+    handlers: {
+        edit: function() {
+            latex = mathField.latex()
+            answer = latexToWebWork(latex)
+            webwork = answer
+            outputText.value = answer
+        }
+    }
+});
+
+/**
+ * @param {string} latex 
+ * 
+ * Latex ==> WebWork Expression
+ * 
+ * 1. Brackets
+ * 2. Fractions
+ * 3. remove all '\'
+ * 
+ */
+
+function latexToWebWork(latex) {
+    latex = Brackets.remove(latex)
+    latex = Fractions.remove(latex)
+    latex = finish(latex)
+    return latex
+}
+
+
+/**
+ * Finds every \left and \right
+ * and removes them.
+ */
+var Brackets = {
+    remove(latex) {
+        let i = 0
+        while (i < latex.length) {
+            if (this.isLeftBracket(latex, i)) {
+                latex = drop(latex, i, i+4)
+            } else if (this.isRightBracket(latex, i)) {
+                latex = drop(latex, i, i+5)
+            }
+            i++
+        }
+        return latex
+    }, 
+    isLeftBracket(l, s) {
+        if (l[s] === '\\' && s + 4 < l.length) {
+            return l[s + 1] === 'l' && l[s + 2] === 'e' && l[s + 3] === 'f' && l[s + 4] === 't'
+        }
+        return false
+    }, 
+    isRightBracket(l, s) {
+        if (l[s] == '\\' && s + 5 < l.length) {
+            return l[s + 1] === 'r' && l[s + 2] === 'i' && l[s + 3] === 'g' && l[s + 4] === 'h' && l[s + 5] === 't'
+        }
+        return false
+    }
+}
+
+
+
+/**
+ * Finds every \frac { ... } { ... } and returns { ... } / { ... }
+ */
+var Fractions = {
+    remove(latex) {
+        let i = 0 
+        while (i < latex.length) {
+            if (this.isFrac(latex, i)) {
+                latex = drop(latex, i, i + 4) 
+                let stack = []
+                for (let j = i; j < latex.length; j++) {
+                    if (latex[j] === '{') {
+                        stack.push('{')
+                    } else if (latex[j] === '}') {
+                        if (stack.length < 1) {
+                            alert('INVALID FRACTION')
+                            return 'ERROR'
+                        }
+                        stack.pop()
+                        if (stack.length === 0) {
+                            latex = latex.substring(0, j + 1) + '/' + latex.substring(j + 1, latex.length)
+                            break
+                        }
+                    }
+                }
+            }
+            i++
+        }
+        return latex
+    },
+    isFrac(l, s) {
+        if (l[s] === '\\' && s + 4 < l.length) {
+            return l[s + 1] === 'f' && l[s + 2] === 'r' && l[s + 3] === 'a' && l[s + 4] === 'c'
+        }
+        return false
+    }   
+}
+
+
+
+/**
+ * removes all instances of '/'
+ */
+function finish(latex) {
+    let output = ""
+    for (let c of latex) {
+        if (c !== '\\') {
+            output += c
+        }
+    }
+    return removeCDot(output)
+}
+
+
+function removeCDot(output) {
+    let i = 0
+    while (i < output.length) {
+        if (isCDot(output, i)) {
+            output = drop(output, i, i+3)
+        }
+        i++
+    }
+    return output
+}
+
+function isCDot(l, s) {
+    if (l[s] === 'c' && s + 3 < l.length) {
+        return l[s + 1] === 'd' && l[s + 2] === 'o' && l[s + 3] === 't'
+    }
+    return false
+}
+
+
+/**
+ * 
+ * @param {string} latex 
+ * @param {int} start 
+ * @param {int} end 
+ * 
+ * returns a new string without the characters between start and end inclusive.
+ * Start and end are both indices. 
+ */
+function drop(latex, start, end) {
+    if (start > end || start < 0 || end > latex.length) {
+        alert('INVALID USE OF DROP.')
+        return 'ERROR'
+    }
+    return latex.substring(0, start) + latex.substring(end + 1, latex.length)
+}
+
+/**
+ * ==============================================================================
+ * ==============================================================================
+ *  TESTS:
+ * ==============================================================================
+ * ==============================================================================
+ */

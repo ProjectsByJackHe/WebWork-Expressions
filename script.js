@@ -9,6 +9,8 @@
 
 var mathFieldSpan = document.getElementById('math-field');
 var outputText = document.getElementById('outputText');
+var copy = document.getElementById('copy') 
+var clear = document.getElementById('clear')
 var webwork = ""
 outputText.onfocus = (event) => {
     event.target.select()
@@ -23,6 +25,7 @@ var mathField = MQ.MathField(mathFieldSpan, {
     handlers: {
         edit: function() {
             latex = mathField.latex()
+            console.log(latex)
             if (PARSED_FLAG) {
                 parseInput(latex)
             }
@@ -32,6 +35,22 @@ var mathField = MQ.MathField(mathFieldSpan, {
         }
     }
 });
+
+
+clear.onclick = () => {
+    mathField.latex("")
+}
+
+copy.onclick = () => {
+    outputText.select()
+    document.execCommand("copy")
+    copy.innerHTML = "Copied to clipboard!"
+    copy.className = "btn btn-success"
+    setTimeout(() => {
+        copy.innerHTML = "Copy Expression"
+        copy.className = "btn btn-primary"
+    }, 1000)
+}
 
 /**
  * @param {latex: string} input

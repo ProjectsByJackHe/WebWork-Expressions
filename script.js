@@ -21,21 +21,17 @@ outputText.onblur = (e) => {
 var PARSED_FLAG = true; 
 var MQ = MathQuill.getInterface(2);
 var mathField = MQ.MathField(mathFieldSpan, {
+    autoCommands: 'pi theta sqrt sum',
     spaceBehavesLikeTab: true, 
     handlers: {
         edit: function() {
             latex = mathField.latex()
-            console.log(latex)
-            if (PARSED_FLAG) {
-                parseInput(latex)
-            }
             answer = latexToWebWork(latex)
             webwork = answer
             outputText.value = answer
         }
     }
 });
-
 
 clear.onclick = () => {
     mathField.latex("")
@@ -51,70 +47,6 @@ copy.onclick = () => {
         copy.className = "btn btn-primary"
     }, 1000)
 }
-
-/**
- * @param {latex: string} input
- * Looks for 'sqrt' and 'pi' 
- * and replaces it with \\sqrt{} 
- * and \\pi
- */
-function parseInput(input) {
-    PARSED_FLAG = false
-    let parsedInput = input
-    parsedInput = squareRoot(parsedInput)
-    parsedInput = pi(parsedInput)
-    if (parsedInput !== input) {
-        mathField.latex(parsedInput)
-        mathField.focus()
-    }
-    PARSED_FLAG = true
-}
-
-function squareRoot(parsedInput) {
-    let i = 0 
-    while (i < parsedInput.length) {
-        if (exist(parsedInput, i, "sqrt")) {
-            // assume parsedInput[i] == "s", ...[i + 1] == "q" ... etc
-            const left = parsedInput.substring(0, i) 
-            const right = parsedInput.substring(i + 4, parsedInput.length)
-            parsedInput = left + "\\sqrt{}" + right
-            i += 3
-        }
-        i++
-    }
-    return parsedInput
-}
-
-function pi(parsedInput) {
-    let i = 0
-    while (i < parsedInput.length) {
-        if (exist(parsedInput, i, "pi")) {
-            // assume parsedInput[i] == "p", ...[i + 1] == "i"
-            const left = parsedInput.substring(0, i) 
-            const right = parsedInput.substring(i + 2, parsedInput.length)
-            parsedInput = left + "\\pi" + right
-            i++
-        }
-        i++
-    }
-    return parsedInput
-}
-
-function exist(parsedInput, s, text) {
-    if (s - 1 >= 0 && parsedInput[s - 1] === "\\") {
-        return false
-    }
-    if (s + text.length - 1 >= parsedInput.length) {
-        return false
-    }
-    for (i = 0; i < text.length; i++) {
-        if (text[i] != parsedInput[s + i]) {
-            return false
-        }
-    }
-    return true
-}
-
 
 /**
  * @param {string} latex 

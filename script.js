@@ -7,21 +7,38 @@
  * - output to the screen a webwork friendly answer
  */
 
-var mathFieldSpan = document.getElementById('math-field');
-var outputText = document.getElementById('outputText');
-var copy = document.getElementById('copy') 
-var clear = document.getElementById('clear')
-var webwork = ""
+let mathFieldSpan = document.getElementById('math-field');
+let outputText = document.getElementById('outputText');
+let copy = document.getElementById('copy') 
+let clear = document.getElementById('clear')
+
+let webwork = ""
+let latex = ""
+let answer = ""
+
+
+
+function updateSaved() {
+    let currentlySavedLatex = localStorage.getItem("latex") || ""
+    let currentlySavedExpressions = localStorage.getItem("expression") || ""
+
+    if (latex !== "") {
+        localStorage.setItem("latex", currentlySavedLatex + " " + latex) 
+        localStorage.setItem("expression", currentlySavedExpressions + " " + answer)
+    }
+}
+
+
 outputText.onfocus = (event) => {
     event.target.select()
 }
 outputText.onblur = (e) => {
     outputText.value = webwork
 }
-var PARSED_FLAG = true; 
-var MQ = MathQuill.getInterface(2);
-var mathField = MQ.MathField(mathFieldSpan, {
-    autoCommands: 'pi theta sqrt sum',
+
+let MQ = MathQuill.getInterface(2);
+let mathField = MQ.MathField(mathFieldSpan, {
+    autoCommands: 'pi theta sqrt sum rho phi',
     spaceBehavesLikeTab: true, 
     handlers: {
         edit: function() {
@@ -34,6 +51,10 @@ var mathField = MQ.MathField(mathFieldSpan, {
 });
 
 clear.onclick = () => {
+    let saveOnClear = document.getElementById("save-on-clear") 
+    if (saveOnClear.checked) {
+        saveCurrentExpression()
+    }
     mathField.latex("")
 }
 
@@ -71,7 +92,7 @@ function latexToWebWork(latex) {
  * Finds every \left and \right
  * and removes them.
  */
-var Brackets = {
+let Brackets = {
     remove(latex) {
         let i = 0
         while (i < latex.length) {
@@ -103,7 +124,7 @@ var Brackets = {
 /**
  * Finds every \frac { ... } { ... } and returns { ... } / { ... }
  */
-var Fractions = {
+let Fractions = {
     remove(latex) {
         let i = 0 
         while (i < latex.length) {

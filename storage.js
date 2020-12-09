@@ -113,3 +113,24 @@ function saveCurrentExpression() {
 }
 
 renderSavedExpressions()
+
+const savePref = localStorage.getItem("save-on-clear")
+if (savePref === null) {
+    localStorage.setItem("save-on-clear", "1")
+} else {
+    if (savePref === "1") {
+        document.getElementById("save-on-clear").checked = true
+    } else {
+        document.getElementById("save-on-clear").checked = false
+    }
+}
+
+let saveOnClear = document.getElementById("save-on-clear")
+
+saveOnClear.onclick = () => {
+    if (!saveOnClear.checked) {
+        localStorage.setItem("save-on-clear", "0")
+    } else {
+        localStorage.setItem("save-on-clear", "1")
+    }
+}

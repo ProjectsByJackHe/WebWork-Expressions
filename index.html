@@ -51,6 +51,7 @@
         </div>
         <div class = "controls">
             <button class = "btn btn-primary" id = "copy"> Copy Expression </button>
+            <button class = "btn btn-dark" id = "cp-latex"> Copy Latex </button>
             <button class = "btn btn-warning" id = "save"> Save Expression </button>
             <button class = "btn btn-danger" id = "clear"> Clear Expression </button>
             <div class="form-check">
@@ -61,12 +62,16 @@
         <div id = "userInput">  
             <h1>Expression:  <span id="math-field"></span></h1>
         </div>
+        <p align="center">Something you can copy+paste into webwork:</p>
+        <textarea id="outputText" class="output" type = "text"></textarea>
+         <p align="center">Raw Latex:</p>
+        <textarea id="outputLatex" class="output" type = "text"></textarea>
 
-        <textarea id="outputText" type = "text"></textarea>
         <div style="display: flex;">
             <h2 style="margin-left: 15px;">Saved Expressions </h2>
             <button class = "btn btn-danger" id = "clear-all" style="margin-left: 15px;"> Clear all </button>
         </div>
+
        
 
         <ul id = "cache" style="text-align: center; height: 350px; overflow: scroll"></ul>

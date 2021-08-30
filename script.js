@@ -9,9 +9,10 @@
 
 let mathFieldSpan = document.getElementById('math-field');
 let outputText = document.getElementById('outputText');
+let outputLatex = document.getElementById('outputLatex')
 let copy = document.getElementById('copy') 
 let clear = document.getElementById('clear')
-
+let latexCopy = document.getElementById('cp-latex')
 let webwork = ""
 let latex = ""
 let answer = ""
@@ -43,6 +44,7 @@ let mathField = MQ.MathField(mathFieldSpan, {
     handlers: {
         edit: function() {
             latex = mathField.latex()
+            outputLatex.value = latex 
             answer = latexToWebWork(latex)
             webwork = answer
             outputText.value = answer
@@ -66,6 +68,18 @@ copy.onclick = () => {
     setTimeout(() => {
         copy.innerHTML = "Copy Expression"
         copy.className = "btn btn-primary"
+    }, 1000)
+}
+
+
+latexCopy.onclick = () => {
+    outputLatex.select()
+    document.execCommand("copy")
+    latexCopy.innerHTML = "Copied to clipboard!"
+    latexCopy.className = "btn btn-success"
+    setTimeout(() => {
+        latexCopy.innerHTML = "Copy Expression"
+        latexCopy.className = "btn btn-primary"
     }, 1000)
 }
 

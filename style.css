@@ -8,7 +8,8 @@
     text-align: center;
 }
 
-#outputText {
+
+.output {
     font-size: 30px;
     text-align: center;
     width: 100%;

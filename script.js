@@ -63,10 +63,8 @@ clear.onclick = () => {
 copy.onclick = () => {
     outputText.select()
     document.execCommand("copy")
-    copy.innerHTML = "Copied to clipboard!"
     copy.className = "btn btn-success"
     setTimeout(() => {
-        copy.innerHTML = "Copy Expression"
         copy.className = "btn btn-primary"
     }, 1000)
 }
@@ -75,11 +73,9 @@ copy.onclick = () => {
 latexCopy.onclick = () => {
     outputLatex.select()
     document.execCommand("copy")
-    latexCopy.innerHTML = "Copied to clipboard!"
     latexCopy.className = "btn btn-success"
     setTimeout(() => {
-        latexCopy.innerHTML = "Copy Expression"
-        latexCopy.className = "btn btn-primary"
+        latexCopy.className = "btn btn-dark"
     }, 1000)
 }
 

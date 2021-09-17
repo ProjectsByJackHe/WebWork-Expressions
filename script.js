@@ -44,7 +44,7 @@ let mathField = MQ.MathField(mathFieldSpan, {
     handlers: {
         edit: function() {
             latex = mathField.latex()
-            outputLatex.value = latex 
+            outputLatex.value = "$" + latex + "$" 
             answer = latexToWebWork(latex)
             webwork = answer
             outputText.value = answer
